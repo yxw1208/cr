@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="referrer" content="never">
+    <title>曹蕊的个人简历</title>
+    <script src="./jquery.js"></script>
+    <link href="./vant.css" rel="stylesheet">
+    <link href="./layui.css" rel="stylesheet">
+
+    <script src="./vue.2.6.12.min.js"></script>
+    <script src="./vant.js"></script>
+<!--    <script src="./vxe-table.2.7.14.js"></script>-->
+<!--    <script src="./xe-utils.2.7.14.js"></script>-->
+    </head>
+
+    <body>
+    <div id="app">
+        <van-tabs sticky swipeable @change="onClick">
+            <van-tab name="jl" title="简历">
+                <van-sticky :offset-top="44">
+                    <div class="jianli"  >
+                        <van-row  >
+                            <van-col span="12"  offset="1">
+                                <van-cell-group>
+                                    <a href="tel:17630050035">
+                                        <van-button icon="phone-o" block type="small" color="linear-gradient(to right, #4bb0ff, #6149f6)">
+                                            联系我：17630050035
+                                        </van-button>
+                                    </a>
+                                </van-cell-group>
+                            </van-col>
+
+                            <van-col span="9"  offset="1">
+                                <van-cell-group>
+                                    <a href="2年-UI设计--曹蕊-17630050035.doc">
+                                        <van-button icon="down" block type="small" color="linear-gradient(to right, #4bb0ff, #7232dd)" >下载简历</van-button>
+                                    </a>
+                                </van-cell-group>
+                            </van-col>
+
+                        </van-row>
+                    </div>
+                </van-sticky>
+
+                <div class="layui-row" style="margin-top: 5px">
+
+                    <div class="layui-col-xs12 layui-col-md6 layui-col-md-offset3">
+                        <van-image class="container"  v-for="item in resume"  :src="item"></van-image>
+                    </div>
+                </div>
+
+            </van-tab>
+
+            <van-tab name="zp" title="作品">
+                <van-sticky :offset-top="44">
+                    <div class="jianli"  >
+                        <van-row  >
+                            <van-col span="12"  offset="1">
+                                <van-cell-group>
+                                    <a href="tel:17630050035">
+                                        <van-button icon="phone-o" block type="small" color="linear-gradient(to right, #4bb0ff, #6149f6)">
+                                            联系我：17630050035
+                                        </van-button>
+                                    </a>
+                                </van-cell-group>
+                            </van-col>
+
+                            <van-col span="9"  offset="1">
+                                <van-cell-group>
+                                    <a href="2年-UI设计--曹蕊-17630050035.doc">
+                                        <van-button icon="down" block type="small" color="linear-gradient(to right, #4bb0ff, #7232dd)" >下载简历</van-button>
+                                    </a>
+                                </van-cell-group>
+                            </van-col>
+
+                        </van-row>
+                    </div>
+                </van-sticky>
+
+                <van-row style="margin-top: 5px">
+                    <van-col span="24">
+                        <van-image class="container"  v-for="item in src"  :src="item"></van-image>
+                    </van-col>
+                </van-row>
+            </van-tab>
+        </van-tabs>
+    </div>
+    <style>
+
+        .jianli{
+            height: 40px;padding-top: 10px;;background-color: #fff
+        }
+        .container{
+            margin:0 auto;
+            margin-bottom: -5px;
+        }
+        .container:after{
+            content:"";
+            display: block;
+            clear:both;
+        }
+        .container img{
+            /*width:50%;*/
+            /*height:260px;*/
+            /*float:left;*/
+        }
+    </style>
+    <script>
+        var app = new Vue({
+            el:'#app',
+            // delimiters: ['${', '}'],
+            data: {
+                src:[],
+                resume:[],
+            },
+            created() {
+
+                for (i=1;i<=16;i++){
+                    this.src.push('./img/images ('+i+').png')
+                }
+                for (i=1;i<=4;i++){
+                    this.resume.push('./img/resume ('+i+').png')
+                }
+            },
+            methods:{
+                onClick(name,title){
+                    if (name=='zp'){
+                      // let toast =  this.$toast.loading({
+                      //     duration: 0, // 持续展示 toast
+                      //     message: '图片较大，加载中...',
+                      //     // forbidClick: true,
+                      // });
+                      let second = 3;
+                      const timer = setInterval(() => {
+                          if ($('img').height()>10000) {
+                              clearInterval(timer);
+                              // 手动清除 Toast
+                              toast.clear();
+                          }
+                      }, 1000);
+                  }
+
+                }
+            }
+            });
+
+        // 一开始没有滚动的时候，出现在视窗中的图片也会加载
+        start();
+
+        // 当页面开始滚动的时候，遍历图片，如果图片出现在视窗中，就加载图片
+        var clock; //函数节流
+        $(window).on('scroll',function(){
+            if(clock){
+                clearTimeout(clock);
+            }
+            clock = setTimeout(function(){
+                start()
+            },200)
+        })
+
+        function start(){
+            $('.container img').not('[data-isLoading]').each(function () {
+                if (isShow($(this))) {
+                    loadImg($(this));
+                }
+            })
+        }
+
+
+        // 判断图片是否出现在视窗的函数
+        function isShow($node){
+            return $node.offset().top <= $(window).height()+$(window).scrollTop();
+        }
+
+        // 加载图片的函数，就是把自定义属性data-src 存储的真正的图片地址，赋值给src
+        function loadImg($img){
+            $img.attr('src', $img.attr('data-src'));
+
+            // 已经加载的图片，我给它设置一个属性，值为1，作为标识
+            // 弄这个的初衷是因为，每次滚动的时候，所有的图片都会遍历一遍，这样有点浪费，所以做个标识，滚动的时候只遍历哪些还没有加载的图片
+            $img.attr('data-isLoading',1);
+        }
+
+    </script>
+    </body>
+
+
+    </html>
